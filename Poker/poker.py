@@ -1,8 +1,6 @@
 import random
 import matplotlib.pyplot as plt
 
-1
-
 
 def get_card(card):
     return card // 13, card % 13
