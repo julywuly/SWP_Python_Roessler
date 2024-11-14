@@ -1,12 +1,7 @@
 import random
 import matplotlib.pyplot as plt
 
-cards = list(range(0, 52))
-possibilities = {
-    "high_card": 0, "pair": 0, "two_pair": 0, "three_of_a_kind": 0,
-    "straight": 0, "flush": 0, "full_house": 0, "four_of_a_kind": 0,
-    "straight_flush": 0, "royal_flush": 0
-}
+1
 
 
 def get_card(card):
@@ -55,7 +50,7 @@ def check_straight(cards):
     return all(values[i] + 1 == values[i + 1] for i in range(4))
 
 
-def draw(card_list, hand_size):
+def draw(card_list, hand_size, possibilities):
     try:
         if hand_size > len(card_list):
             raise ValueError("Hand size cannot be larger than the number of available cards.")
@@ -92,9 +87,17 @@ def draw(card_list, hand_size):
 
 
 def main():
-    draws = 1000000
+    draws = int(input("Wie oft soll das Ziehen wiederholt werden? "))
+
+    cards = list(range(0, 52))
+    possibilities = {
+        "high_card": 0, "pair": 0, "two_pair": 0, "three_of_a_kind": 0,
+        "straight": 0, "flush": 0, "full_house": 0, "four_of_a_kind": 0,
+        "straight_flush": 0, "royal_flush": 0
+    }
+
     for _ in range(draws):
-        draw(cards, 5)
+        draw(cards, 5, possibilities)
 
     fig, ax = plt.subplots()
     fig.set_size_inches(17, 7)
