@@ -85,7 +85,15 @@ def draw(card_list, hand_size, possibilities):
 
 
 def main():
-    draws = int(input("Wie oft soll das Ziehen wiederholt werden? "))
+    while True:
+        try:
+            draws = int(input("Wie oft soll das Ziehen wiederholt werden? "))
+            if draws < 0:
+                print("Bitte geben Sie eine positive Zahl ein.")
+            else:
+                break
+        except ValueError:
+            print("Ungültige Eingabe! Bitte geben Sie eine ganze Zahl ein.")
 
     cards = list(range(0, 52))
     possibilities = {
