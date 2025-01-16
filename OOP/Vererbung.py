@@ -5,13 +5,17 @@ class Artist:
         self.name = name
         self.albums = []
 
-    def add_album(self, album):
-        if not isinstance(album, Album):  # Fehlerbehebung: Typüberprüfung
+    def add_album(self, alb):
+        if not isinstance(alb, Album):  # Fehlerbehebung: Typüberprüfung
             raise TypeError("Only Album objects can be added.")
-        self.albums.append(album)
+        # Neuer Fehler (behebbar): Album darf nicht doppelt hinzugefügt werden
+        if alb in self.albums:
+            print(f"Warning: Album '{alb.title}' already added. Skipping...")
+            return
+        self.albums.append(alb)
 
     def __str__(self):
-        return f"Artist: {self.name}, Albums: {[album.title for album in self.albums]}"
+        return f"Artist: {self.name}, Albums: {[albums.title for albums in self.albums]}"
 
 
 class Album:
@@ -27,6 +31,13 @@ class Album:
     def add_song(self, song):
         if not isinstance(song, Song):  # Fehlerbehebung: Typüberprüfung
             raise TypeError("Only Song objects can be added.")
+        # Hochblubber-Fehler (behebbar): Song-Titel doppelt
+        try:
+            if song.title in [s.title for s in self.songs]:
+                raise ValueError(f"Duplicate song title: '{song.title}' already exists in the album.")
+        except ValueError as err:
+            print(f"Warning: {err}. Skipping...")
+            return
         self.songs.append(song)
 
     def __str__(self):
@@ -57,14 +68,28 @@ try:
     album1 = Album("The Car", 2022)
     album1.add_song(Song("Mr. Schwartz", 3.5))
     album1.add_song(Song("The Car", 4.0))
-    album1.add_song(Song("Sculptures of anything goes", 5.2))
+    album1.add_song(Song("Mr. Schwartz", 3.5))  # Hochblubber-Fehler (behebbar)
 
     album2 = Album("Humbug", 2023)
     album2.add_song(Song("Pretty Visitors", 3.8))
     album2.add_song(Song("My Propeller", 4.1))
 
     artist.add_album(album1)
+    artist.add_album(album1)  # Neuer Fehler (behebbar)
     artist.add_album(album2)
+
+    # Neuer Fehler (NICHT behebar): ungültiger Album-Titel
+    try:
+        invalid_album = Album(123, 2024)
+        artist.add_album(invalid_album)
+    except TypeError as e:
+        print(f"Critical Error: {e}. Cannot continue with invalid album.")
+
+    # Hochblubber-Fehler (NICHT behebar): ungültige Song-Dauer
+    try:
+        album2.add_song(Song("Invalid Song", -2))
+    except ValueError as e:
+        print(f"Critical Error: {e}. Cannot add invalid song.")
 
     print(artist)
     for album in artist.albums:
