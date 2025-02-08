@@ -35,6 +35,11 @@ class Auto:
     def __len__(self):
         return self.ps
 
+    def __truediv__(self, other):
+        if isinstance(other, Auto):
+            return other.ps / self.ps
+        raise TypeError("Division is only supported between Car objects.")
+
 
 if __name__ == "__main__":
     a1 = Auto(50)
@@ -64,5 +69,10 @@ if __name__ == "__main__":
 
     try:
         print(a1 < 100)
+    except TypeError as e:
+        print(e)
+
+    try:
+        print(a1 / a2)
     except TypeError as e:
         print(e)
