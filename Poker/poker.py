@@ -1,5 +1,19 @@
+import functools
 import random
 import matplotlib.pyplot as plt
+import time
+
+
+def measure_time(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"{func.__name__} lasted {end_time - start_time:.6f} seconds")
+        return result
+
+    return wrapper
 
 
 def get_card(card):
@@ -84,6 +98,7 @@ def draw(card_list, hand_size, possibilities):
         print(f"An unexpected error occurred: {e}")
 
 
+@measure_time
 def main():
     while True:
         try:
